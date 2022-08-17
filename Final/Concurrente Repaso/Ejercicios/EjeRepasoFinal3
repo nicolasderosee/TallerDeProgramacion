@@ -1,0 +1,77 @@
+programa ejeRepasoFinal3 
+
+procesos 
+
+  proceso juntarFlor(ES f:numero)  
+  comenzar
+    mientras(HayFlorEnLaEsquina)  
+      f:= f + 1 
+  fin   
+  
+
+areas
+  area1: AreaC(1,100,1,100)
+
+
+robots 
+  robot tipo1 
+  variables f,soy,avD,caD,cai,avi:numero 
+  comenzar
+    f:= 0 
+    RecibirMensaje(soy,jefe) 
+    RecibirMensaje(cai,jefe) 
+    Pos(cai,avi)
+    repetir 10
+      juntarFlor(f)
+      mover
+    RecibirMensaje(avD,jefe) 
+    RecibirMensaje(caD,jefe) 
+    repetir f  
+      BloquearEsquina(avD,caD) 
+      Pos(avD,caD) 
+      depositarFlor 
+      Pos(cai,avi) 
+      LiberarEsquina(avD,caD) 
+    EnviarMensaje(f,jefe) 
+    EnviarMensaje(soy,jefe) 
+  fin 
+ 
+  
+  robot tipo2
+  variables depositoAV,depositoCA,f,fMin,rMin:numero 
+  comenzar  
+    fMin:=9999 
+    EnviarMensaje(1,recolector1) 
+    EnviarMnesaje(2,recolector2) 
+    EnviarMensaje(5,recolector1) 
+    EnviarMensaje(6,recolector2) 
+    Random(depositoAV,10,20) 
+    Random(depositoCA,10,20) 
+    EnviarMensaje(despositoAv,recolector1) 
+    EnviarMensaje(despositoAv,recolector2)
+    repetir 2  
+      RecibirMensaje(id,*) 
+      si(id = 1) 
+        RecibirMensaje(f,robot1) 
+      sino 
+        RecibirMensaje(f,robot2)  
+      si(f < fMin)  
+        fMin:= f 
+        rMin:= id  
+    informar(rMin)
+  fin
+ 
+ 
+variables 
+  recolector1:tipo1
+  recolector2:tipo1  
+  jefe:tipo2  
+
+comenzar  
+  AsignarArea(recolector1,area1)
+  AsignarArea(recolector2,area1)
+  AsignarArea(jefe,area1)
+  Iniciar(recolector1,2,2)
+  Iniciar(recolector2,3,3)
+  Iniciar(jefe,1,1)
+fin 

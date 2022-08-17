@@ -1,0 +1,68 @@
+programa x
+procesos
+  proceso juntarPapel(ES p:numero ES ok:boolean)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+    sino 
+      ok:= F
+  fin
+areas
+  areaR1: AreaP(4,1,4,11)
+  areaR2: AreaP(6,1,6,11)
+  areaR3: AreaP(1,1,1,1)
+  areaR1yR2: AreaPC(11,11,11,11)
+  areaR12: AreaP(4,12,4,100)
+  areaR22: AreaP(6,12,6,100)
+robots
+  robot tipo1
+  variables
+    p,miAv,miCa,soy:numero
+    ok:boolean
+  comenzar
+    p:= 0
+    ok:= V
+    RecibirMensaje(soy,r3)
+    mientras(ok = V) & (miCa < 100)
+      miAv:=PosAv
+      miCa:=PosCa
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      juntarPapel(p,ok)
+      Pos(miAv,miCa)
+      LiberarEsquina(11,11)
+      si(HayPapelEnLaBolsa)
+        depositarPapel
+        mover
+    EnviarMensaje(soy,r3) 
+  fin 
+  robot tipo2
+  variables
+    id:numero
+  comenzar 
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    RecibirMensaje(id,*)
+    Informar(id)
+    RecibirMensaje(id,*)
+  fin
+variables
+  r1:tipo1
+  r2:tipo1
+  r3:tipo2
+comenzar
+  AsignarArea(r1,areaR1)
+  AsignarArea(r1,areaR1yR2)
+  AsignarArea(r1,areaR12)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r2,areaR1yR2)
+  AsignarArea(r2,areaR22)
+  AsignarArea(r3,areaR3)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,1,1)
+fin
+
+
+

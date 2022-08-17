@@ -1,0 +1,138 @@
+programa EjercicioAdi1 
+procesos  
+  proceso LineaH(E ancho:numero)  
+  comenzar  
+    repetir ancho   
+      JuntarFlor(PosAv,PosCa) 
+      depositarFlor 
+      mover  
+  fin  
+ 
+  proceso LineaV(E alto:numero) 
+  comenzar  
+    repetir alto  
+      JuntarPapel(PosAv,PosCa)  
+      depositarPapel 
+      mover 
+  fin 
+
+  proceso JuntarFlor(E av:numero; E ca:numero) 
+  comenzar 
+    BloquearEsquina(15,15) 
+    Pos(15,15) 
+    tomarFlor 
+    Pos(av,ca) 
+    LiberarEsquina(15,15) 
+  fin 
+   
+  proceso JuntarPapel(E av:numero; E ca:numero) 
+  comenzar
+    BloquearEsquina(15,15) 
+    Pos(15,15) 
+    tomarPapel 
+    Pos(av,ca) 
+    LiberarEsquina(15,15) 
+  fin 
+
+     
+areas
+  ciudad1: AreaPC(2,2,53,53)
+  ciudad2: AreaP(1,1,1,1) 
+
+robots
+  robot tipo1  {junta flores}
+  variables  
+    ancho:numero  
+    equipo:numero 
+    av:numero
+    ca:numero
+  comenzar  
+    derecha  
+    RecibirMensaje(equipo,jefe) 
+    JuntarFlor(PosAv,PosCa)  
+    ancho:= 3 
+    RecibirMensaje(av,jefe)
+    RecibirMensaje(ca,jefe)
+    BloquearEsquina(av,ca) 
+    Pos(av,ca)
+    depositarFlor
+    mover 
+    LiberarEsquina(av,ca) 
+    LineaH(ancho) 
+    EnviarMensaje(equipo,jefe) 
+  fin
+  
+  robot tipo2  {junta papeles}
+  variables
+    alto:numero
+    equipo:numero
+    av:numero
+    ca:numero
+  comenzar
+    RecibirMensaje(equipo,jefe)
+    JuntarPapel(PosAv,PosCa) 
+    alto:= 11
+    RecibirMensaje(av,jefe)
+    RecibirMensaje(ca,jefe)
+    BloquearEsquina(av,ca) 
+    Pos(av,ca)
+    depositarPapel 
+    mover
+    LiberarEsquina(av,ca) 
+    LineaV(alto)
+    EnviarMensaje(equipo,jefe) 
+  fin
+  
+  robot tipo3
+  variables 
+    termino1:numero
+    termino2:numero
+    termino3:numero 
+    termino4:numero 
+  comenzar
+    EnviarMensaje(1,jugador1)
+    EnviarMensaje(1,jugador2)
+    EnviarMensaje(2,jugador3)
+    EnviarMensaje(2,jugador4)
+    EnviarMensaje(5,jugador1)
+    EnviarMensaje(4,jugador1)
+    EnviarMensaje(5,jugador2)
+    EnviarMensaje(4,jugador2)
+    EnviarMensaje(11,jugador3)
+    EnviarMensaje(4,jugador3)
+    EnviarMensaje(11,jugador4)
+    EnviarMensaje(4,jugador4)
+    RecibirMensaje(termino1,*) 
+    RecibirMensaje(termino2,*)
+    RecibirMensaje(termino3,*)
+    si(termino1 = termino2) 
+      Informar('GanoElEquipo',termino1)
+    sino 
+      Informar('GanoElEquipo',termino3) {el termino3 define quien de los dos equipos gana en caso de que sean distintos en el primer if}
+    RecibirMensaje(termino4,*)   
+  fin
+  
+variables
+  jugador1:tipo1
+  jugador2:tipo2
+  jugador3:tipo1
+  jugador4:tipo2
+  jefe:tipo3
+
+comenzar
+  AsignarArea(jugador1,ciudad1)
+  AsignarArea(jugador2,ciudad1)
+  AsignarArea(jugador3,ciudad1) 
+  AsignarArea(jugador4,ciudad1) 
+  AsignarArea(jugador4,ciudad1)
+  AsignarArea(jefe,ciudad2)
+  Iniciar(jugador1, 50, 50)
+  Iniciar(jugador2, 51, 51) 
+  Iniciar(jugador3, 52, 52)
+  Iniciar(jugador4, 53, 53)
+  Iniciar(jefe, 1, 1)
+fin 
+
+
+
+

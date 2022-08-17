@@ -1,0 +1,159 @@
+programa Ejercicio2
+  
+procesos
+  proceso juntarFlores (ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+  fin
+
+  proceso rectangulo(E alto: numero; E ancho: numero; ES flores: numero)
+  comenzar
+    repetir 2
+      {alto}
+      repetir alto
+        juntarFlores(flores)
+        mover
+      derecha
+      {ancho}
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha
+  fin
+
+areas
+  area1 : AreaP(15,15,30,35)
+  area2: AreaP(40,40,55,60)
+  areaDeposito: AreaC(10,10,10,10)
+robots 
+  robot tipo1
+  variables
+    flores:numero
+    avOrig,caOrig: numero
+  comenzar
+    avOrig:=PosAv
+    caOrig:=PosCa
+    flores:=0
+    rectangulo(20,15,flores)
+    {Depositamos en 10,10 las flores todas juntas}
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    repetir flores
+      depositarFlor
+    Pos(avOrig,caOrig)
+    LiberarEsquina(10,10)      
+  fin
+  
+     
+variables 
+  robot1: tipo1
+  robot2: tipo1
+comenzar 
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot1,areaDeposito)
+  AsignarArea(robot2,areaDeposito)
+  Iniciar(robot1, 15, 15)
+  Iniciar(robot2, 40, 40)
+fin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+programa Ejercicio3
+  
+procesos
+  proceso juntarFlores (ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+  fin
+
+  proceso rectangulo(E alto: numero; E ancho: numero; ES flores: numero)
+  comenzar
+    repetir 2
+      {alto}
+      repetir alto
+        juntarFlores(flores)
+        mover
+      derecha
+      {ancho}
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha
+  fin
+
+areas
+  area1 : AreaP(15,15,30,35)
+  area2: AreaP(40,40,55,60)
+  areaDeposito: AreaPC(10,10,10,10)
+  casa1: AreaP(2,2,2,2)
+  casa2: AreaP(6,6,6,6)
+  casaJ: AreaP(1,1,1,1)
+robots 
+  robot tipo1
+  variables
+    flores:numero
+    avOrig,caOrig: numero
+    alto:numero
+  comenzar
+    RecibirMensaje(alto,robotJ)
+    RecibirMensaje(avOrig,robotJ)
+    RecibirMensaje(caOrig,robotJ)
+    Pos(avOrig,caOrig)
+    flores:=0
+    rectangulo(alto,15,flores)
+    {Depositamos en 10,10 las flores de a una}
+    repetir flores
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(avOrig,caOrig)
+      LiberarEsquina(10,10)      
+  fin
+  
+  robot tipo2
+  variables
+    a: numero
+  comenzar
+    Random(a,1,20)
+    EnviarMensaje(a,robot1)
+    EnviarMensaje(15,robot1)
+    EnviarMensaje(15,robot1)
+    Random(a,1,20)
+    EnviarMensaje(a,robot2)
+    EnviarMensaje(40,robot2)
+    EnviarMensaje(40,robot2)  
+  fin
+  
+     
+variables 
+  robot1: tipo1
+  robot2: tipo1
+  robotJ: tipo2
+comenzar 
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot1,areaDeposito)
+  AsignarArea(robot2,areaDeposito)
+  AsignarArea(robot1,casa1)
+  AsignarArea(robot2,casa2)
+  AsignarArea(robotJ,casaJ)
+  Iniciar(robot1, 2, 2)
+  Iniciar(robot2, 6, 6)
+  Iniciar(robotJ, 1, 1)
+fin

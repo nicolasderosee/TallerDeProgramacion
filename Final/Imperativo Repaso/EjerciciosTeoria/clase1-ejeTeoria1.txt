@@ -1,0 +1,157 @@
+program Clase1;
+const
+  CANTMAX=20;
+type
+  rangovector = 1..CANTMAX;
+  vector = array[rangovector] of integer;
+
+  lista = ^nodo;
+  nodo = record
+    dato: integer;
+    sig: lista;
+  end;
+
+
+
+{--------------------------------------------------------------------
+* 1. Realice un módulo que genere y devuelva un arreglo de enteros. 
+* La carga del arreglo debe realizarse hasta que se lee el número 0 o 
+* se hayan leído 20 números.
+}
+procedure leerarreglos(var v:vector;var diml:integer);
+var 
+  num:integer;
+begin
+	read(num);
+	diml:=0;
+	while(num<>0)and(diml<20)do begin
+	  diml:=diml+1;
+	  v[diml]:=num;
+          read(num);
+	end;
+end;
+
+
+
+
+
+
+{--------------------------------------------------------------------
+* 2. Realice un módulo que reciba un arreglo e imprima todo su contenido.
+}
+Procedure imprimir (datos: vector; dimL: integer);
+ Var
+  i:integer;
+Begin
+  writeln('-----------------------');   
+  for i:= 1 to dimL do begin
+   write(' | ', datos[i]);
+  end; 
+  writeln(' | ');   
+  writeln('-----------------------');   
+End; 
+
+
+
+
+
+
+{--------------------------------------------------------------------
+* 3. Realice un módulo que reciba un arreglo y un valor num, y de ser 
+* posible elimine del arreglo el valor num.
+ }
+function buscarNumero (vec: vector; diml: integer; n: integer): integer;
+var i: integer;
+begin
+	i := 1;
+	while (i <= diml) and (n <> vec[i]) do begin
+		i := i + 1;
+	end;
+	buscarNumero := i; // Si n no está en el vector retorna dimL+1
+end;
+
+procedure borrarNumero (var v: vector; var dimL: integer; num: integer);
+var
+	posEliminar, i: integer;
+begin
+	posEliminar := buscarNumero (v, diml, num); //se retorna la pos donde se encuentra el numero recibido por param 
+	if( posEliminar <= dimL) then begin
+	  dimL := dimL-1;
+	  for i:= posEliminar to diml do begin  
+		 v[i] := v[i+1];
+	  end;
+	end; 
+end;
+
+
+
+
+{--------------------------------------------------------------------
+* 4. Realice un módulo que genere una lista de enteros de manera 
+* aleatoria hasta leer el número 15. Se sugiere que la función ramdom 
+* genere números entre 0 y 15. Los elementos deben quedar almacenados 
+* en la lista en el mismo orden en que fueron leídos.
+}
+procedure agregarAtras(var l, ult: lista; num: integer);
+var aux: lista;
+begin
+	new(aux);
+	aux^.dato:= num;
+	aux^.sig:= nil;
+	if(l = nil) then
+		l:= aux
+	else
+		ult^.sig:= aux;
+	ult:= aux;
+end;
+
+procedure listaAleatoria(var l: lista);
+var 
+  num: integer; 
+  ult: lista;
+begin
+	Randomize;
+	num:= Random(16);
+	while(num <> 15) do
+	begin
+		agregarAtras(l, ult, num);
+		num:= Random(16);
+	end;
+end;
+
+
+procedure imprimirLista(l: lista);
+var i: integer;
+begin
+	i:= 1;
+	while(l<>nil) do begin
+		writeln(l^.dato, ' es el valor de la posicion ', i, ' de la lista');
+		l:= l^.sig;
+		i:= i + 1;
+	end;
+end;
+
+
+
+{----- Prog Ppal --------------}
+var
+  v: vector; 
+  dimL: integer;
+  L: lista;
+  
+begin
+  {Inciso 1 y 2}
+  leerarreglos(v, dimL);
+  imprimir(v, dimL);
+  
+  {Inciso 3}
+  borrarNumero(v, dimL, 5);
+  imprimir(v, dimL);
+  
+  {Inciso 4}
+  L:= nil;
+  listaAleatoria(L);
+  imprimirLista(L);
+  
+ 
+end.

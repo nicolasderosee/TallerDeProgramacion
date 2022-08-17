@@ -1,0 +1,79 @@
+programa final 
+procesos  
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1  
+  fin
+  
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+areas
+  Area1: AreaP(2,2,2,2) 
+  Area2: AreaP(3,3,3,3)
+  AreaDeposito: AreaPC(1,5,100,5)
+  AreaObjetos: AreaPC(50,50,50,50)
+
+robots 
+  robot papelero
+  variables
+    papeles, flores: numero    
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    juntarPapeles(papeles)
+    Pos(2,2)
+    LiberarEsquina(50,50)
+    EnviarMensaje(papeles, robot2)  
+    RecibirMensaje(flores, robot2)
+    si papeles > flores
+      Informar('Objetos_juntados', papeles)  
+      Pos(1,5) 
+      derecha
+      repetir papeles
+        mover
+  fin
+
+  robot florero
+  variables
+    flores, papeles: numero    
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    juntarFlores(flores)
+    Pos(3,3)
+    LiberarEsquina(50,50)
+    EnviarMensaje(flores, robot1)  
+    RecibirMensaje(papeles, robot1)
+    si flores > papeles 
+      Informar('Objetos_juntados', flores)  
+      Pos(1,5) 
+      derecha
+      repetir flores
+        mover
+  fin
+
+variables 
+  robot1: papelero
+  robot2: florero
+
+comenzar
+  AsignarArea(robot1, Area1)
+  AsignarArea(robot1, AreaObjetos)
+  AsignarArea(robot1, AreaDeposito)
+
+  AsignarArea(robot2, Area2)
+  AsignarArea(robot2, AreaObjetos)
+  AsignarArea(robot2, AreaDeposito)
+
+  Iniciar(robot1, 2,2)
+  Iniciar(robot2, 3,3)
+fin
+
+

@@ -1,0 +1,87 @@
+programa Ejercicio-3-4Rep
+
+procesos 
+  proceso juntar (ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+  fin
+  
+  proceso rectangulo (E alto:numero; E ancho:numero; ES flor:numero)
+  comenzar 
+    repetir 2
+      repetir alto 
+        juntar(flor)
+        mover
+      derecha
+      repetir ancho
+        juntar(flor)
+        mover
+      derecha
+  fin 
+
+areas 
+  ciudad1: AreaP(2,2,5,7)
+  ciudad2: AreaP(6,2,9,7)
+  ciudad3: AreaP(10,2,13,7)
+  ciudad4: AreaP(14,2,17,7)
+  ciudad5: AreaP(18,2,21,7)
+  ciudad6: AreaP(22,2,25,7)
+  ciudad7: AreaP(1,1,1,1)
+      
+robots
+  robot tipo1
+  variables 
+    f:numero
+    ancho:numero
+    alto:numero
+  comenzar
+    f:=0
+    alto:=5
+    ancho:=3
+    rectangulo(alto,ancho,f) 
+    EnviarMensaje(f,jefe)
+  fin
+  
+  robot tipo2
+  variables 
+    total:numero
+    flores:numero 
+  comenzar
+    total:=0
+    flores:=0
+    repetir 6
+      RecibirMensaje(flores,*)
+      total:= total + flores 
+    Informar('TotalDeFloresJuntadas', total) 
+  fin 
+        
+variables 
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo1
+  robot4:tipo1
+  robot5:tipo1
+  robot6:tipo1
+  jefe:tipo2
+  
+comenzar
+  AsignarArea(robot1,ciudad1)
+  AsignarArea(robot2,ciudad2)
+  AsignarArea(robot3,ciudad3)
+  AsignarArea(robot4,ciudad4)
+  AsignarArea(robot5,ciudad5)
+  AsignarArea(robot6,ciudad6)
+  AsignarArea(jefe,ciudad7)
+  Iniciar(robot1, 2, 2)
+  Iniciar(robot2, 6, 2) 
+  Iniciar(robot3, 10, 2)
+  Iniciar(robot4, 14, 2)
+  Iniciar(robot5, 18, 2)
+  Iniciar(robot6, 22, 2)
+  Iniciar(jefe, 1, 1) 
+fin
+
+
+

@@ -1,0 +1,55 @@
+programa Ejercicio4-8
+
+procesos 
+  proceso juntar (ES flor:numero; ES ok:boolean)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+    sino
+      ok:=F
+  fin
+
+  proceso tomar(ES flor:numero; E av:numero; E ca:numero; ES ok:boolean)
+  comenzar
+    BloquearEsquina(15,23)
+    Pos(15,23)
+    juntar(flor,ok)
+    Pos(av,ca)
+    LiberarEsquina(15,23)
+  fin
+     
+areas
+  ciudad: AreaC(1,1,100,100)
+
+robots 
+  robot tipo1
+  variables 
+    f:numero
+    av:numero
+    ca:numero
+    ok:boolean
+  comenzar
+    f:= 0
+    ok:=V
+    av:= PosAv
+    ca:= PosCa
+    mientras(ok=V)
+      tomar(f,av,ca,ok)  
+    Informar('cantidadDeFlores',f)
+  fin
+  
+variables
+  recolector1: tipo1
+  recolector2: tipo1
+  recolector3: tipo1
+comenzar 
+  AsignarArea(recolector1,ciudad)
+  AsignarArea(recolector2,ciudad)
+  AsignarArea(recolector3,ciudad)
+  Iniciar(recolector1, 9, 9)
+  Iniciar(recolector2, 11, 9) 
+  Iniciar(recolector3, 13, 9)
+fin
+
+

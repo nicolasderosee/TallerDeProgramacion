@@ -1,0 +1,155 @@
+Implementar un programa que procese la información de los participantes a un concurso de preguntas y respuestas (como máximo 20). 
+De cada participante se lee el código de participante y su edad. El ingreso de los participantes finaliza
+cuando se lee el código -1.
+
+a) Almacenar la información que se lee en un vector.
+b) Mostrar la información almacenada. 
+c) Ordenar el vector de participantes por edad. 
+d) Mostrar el vector ordenado. 
+e) Eliminar del vector ordenado los participantes con edades entre 20 y 22.
+f) Mostrar el vector resultante. 
+g) Generar una lista ordenada de menor a mayor con los participantes que quedaron en el vector despues de realizar el inciso e. 
+
+program clase1Parte2;
+type
+
+	
+	dimF = 1..20;
+	
+	participante = record
+		cod:integer;
+		edad:integer;
+	end;
+	
+	lista = ^nodo;
+	nodo = record
+		dato:participante;
+		sig:lista;
+	end;
+
+	vec = array [dimF] of participante;
+	
+procedure leerp (var p:participante);
+begin
+	writeln ('Ingrese el codigo del participante: ');
+	readln (p.cod);
+	if (p.cod <> -1) then begin
+		writeln ('Ingrese la edad del cliente');
+		readln (p.edad);
+	end;
+end;
+
+
+procedure cargarv (var v:vec;var diml:integer);
+var
+	p:participante;
+begin
+	leerp (p);
+	while (p.cod <> -1) and (diml < 20) do begin
+		diml:= diml + 1;
+		v[diml]:= p;
+		writeln ('---------Nuevo participante-----------');
+		leerp (p);
+	end;
+end;
+
+procedure informovec (v:vec; dimL:integer);
+var
+	i:dimF;
+begin
+	writeln ('---------------informo vector----------------');
+	for i:= 1 to dimL do 
+		writeln ('Codigo de participante : ',v[i].cod,' Edad del participante: ',v[i].edad);
+end;
+
+
+Procedure OrdenarVector(var v:vec; dl:integer);
+	var
+		i,j:integer;
+		actual:participante;
+	begin
+		for i:=2 to dl do begin
+			actual:=v[i];
+			j:=i-1;
+			while(j>0)and(v[j].edad>actual.edad)do begin
+				v[j+1]:=v[j];
+				j:=j-1;
+			end;
+			v[j+1]:=actual;
+		end;
+	end;
+
+
+procedure eliminarParticipantes(var v:vec; var dimL:integer; valor1:integer; valor2:integer);
+var
+  posicion, i, cant : integer;
+begin
+  
+  cant := 0;
+  i := 1;  
+  {busco al primer participante de 20 años o mas}
+  while ((i <= dimL) and (v[i].edad < valor1 )) do 
+	i := i +1;
+  
+  posicion:= i;
+  while (i <= dimL) and (v[i].edad <=valor2 ) do
+	i := i + 1;
+
+  { vamos a eliminar a todos los parcipantes entre las posiciones posicion e i del vector V }	  
+  cant := i - posicion;
+  for i := (posicion+cant) to dimL do
+     v[i-cant] := v[i];
+	  
+  dimL := dimL - cant;
+	  
+end;
+	
+procedure AgregarAdelante(var L:lista;part:participante);
+var
+	nuevo:lista;
+begin
+	new(nuevo);
+	nuevo^.dato:=part;
+	nuevo^.sig:=L;
+	L:=nuevo;
+end;
+
+// Se recorre el vector de forma inversa y se agrega adelante en la lista.
+procedure GenerarListaB(v:vec; dimL:integer; var L:lista);
+var
+	i:integer;
+begin
+	L:=nil;
+	for i:=dimL downto 1 do
+	begin
+		AgregarAdelante(L,v[i]);
+	end;
+end;	
+
+
+procedure imprimirLista(L : lista);
+begin
+  while (L <> NIL) do 
+  begin
+	  writeln('Codigo: ',L^.dato.cod,' - Edad: ',L^.dato.edad);
+	  L := L^.sig;
+  end;
+end;
+	
+  
+{---------- Programa ppal ------------------------- }  
+var
+	v: vec;
+	diml:integer;
+	L:lista;
+begin
+  diml:=0;
+  cargarv (v,diml);
+  informovec (v,diml);
+  OrdenarVector (v,diml);
+  informovec (v,diml);
+  eliminarParticipantes(v,diml,20,22);
+  informovec (v,diml);
+  GenerarListaB(v,diml,L);  
+  imprimirLista(L);
+end.

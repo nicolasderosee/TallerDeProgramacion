@@ -1,0 +1,84 @@
+programa Ejercicio-1hd 
+
+procesos  
+  proceso juntar (ES flor:numero) 
+  comenzar  
+    mientras (HayFlorEnLaEsquina)  
+      tomarFlor  
+      flor:= flor + 1  
+  fin  
+  
+  proceso rectangulo (E alto:numero; E ancho:numero; ES flor:numero)  
+  comenzar  
+    repetir 2  
+      repetir alto   
+        juntar(flor)  
+        mover  
+      derecha  
+      repetir ancho  
+        juntar(flor)  
+        mover  
+      derecha  
+  fin   
+
+areas  
+  ciudad1: AreaP(2,2,5,7)  
+  ciudad2: AreaP(6,2,8,10)  
+  ciudad3: AreaP(1,1,1,1)  
+      
+robots
+  robot tipo1 
+  variables  
+    f:numero 
+    ancho:numero 
+    alto:numero 
+    miNum:numero
+  comenzar  
+    f:=0 
+    RecibirMensaje(miNum,robot3)
+    RecibirMensaje(alto,robot3) 
+    RecibirMensaje(ancho,robot3) 
+    rectangulo(alto,ancho,f)  
+    EnviarMensaje(miNum,robot3)
+    EnviarMensaje(f,robot3) 
+  fin 
+  
+  robot tipo2  
+  variables 
+    flor:numero 
+    numRobot:numero
+  comenzar 
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(5,robot1) 
+    EnviarMensaje(3,robot1)  
+    EnviarMensaje(8,robot2)  
+    EnviarMensaje(2,robot2) 
+    RecibirMensaje(numRobot,*)
+    Informar('TerminoPrimeroElRobot', numRobot)
+    si numRobot = 2
+      RecibirMensaje(flor,robot2)  
+      Informar('CantidadDeFloresJuntadas',flor) 
+    sino 
+      RecibirMensaje(flor,robot1)  
+      Informar('CantidadDeFloresJuntadas',flor)  
+  fin 
+      
+variables   
+  robot1: tipo1  
+  robot2: tipo1  
+  robot3: tipo2 
+  
+comenzar  
+  AsignarArea(robot1,ciudad1)   
+  AsignarArea(robot2,ciudad2)    
+  AsignarArea(robot3,ciudad3)    
+  Iniciar(robot1, 2, 2)  
+  Iniciar(robot2, 6, 2) 
+  Iniciar(robot3, 1, 1)   
+fin     
+
+
+
+
+

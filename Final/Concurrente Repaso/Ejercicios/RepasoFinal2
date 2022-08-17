@@ -1,0 +1,100 @@
+programa x
+procesos
+  
+  proceso vaciarEsquina(E av:numero E ca:numero)
+  comenzar 
+    Pos(av,ca)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor 
+  fin 
+  
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  
+  proceso rectangulo (E ancho:numero E alto:numero ES flores:numero)
+  comenzar
+    repetir 2
+      repetir alto 
+        juntarFlores(flores)
+        mover
+      derecha
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha 
+  fin
+  
+  
+areas
+  area1: AreaP(1,1,1,1)
+  area2: AreaP(3,1,9,13)
+  area3: AreaP(11,1,17,13)
+  area4: AreaC(10,12,10,12)
+  area5 :AreaPC(2,1,2,1)
+  
+robots 
+  robot tipo1
+  variables 
+    f,avi,cai,av,ca:numero
+  comenzar
+    repetir 3
+      f:= 0
+      avi:= PosAv
+      cai:= PosCa
+      rectangulo(6,3,f)
+      repetir f
+        BloquearEsquina(10,12)
+        Pos(10,12)
+        depositarFlor
+        Pos(avi,cai)
+        LiberarEsquina(10,12)
+      Pos(avi,cai+4)
+    EnviarMensaje(1,robot3)
+    RecibirMensaje(av,robot3)
+    RecibirMensaje(ca,robot3)
+    Pos(av,ca)
+  fin 
+  
+  robot tipo2 
+  variables  
+    fTotal,termino:numero
+  comenzar 
+    fTotal:=0
+    vaciarEsquina(10,12)
+    Pos(1,1)
+    repetir 2
+      RecibirMensaje(termino,*)
+    Pos(10,12)
+    juntarFlores(fTotal)
+    Pos(1,1)
+    si(fTotal > 15)
+      EnviarMensaje(2,robot1)
+      EnviarMensaje(1,robot1)
+    sino
+      EnviarMensaje(2,robot2)
+      EnviarMensaje(1,robot2)
+  fin
+  
+variables
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo2
+comenzar
+  AsignarArea(robot1,area2)
+  AsignarArea(robot1,area4)
+  AsignarArea(robot1,area5)
+  AsignarArea(robot2,area3)
+  AsignarArea(robot2,area4)
+  AsignarArea(robot2,area5)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot3,area4)
+  Iniciar(robot1,3,1)
+  Iniciar(robot2,11,1)
+  Iniciar(robot3,1,1)
+fin 
+
+

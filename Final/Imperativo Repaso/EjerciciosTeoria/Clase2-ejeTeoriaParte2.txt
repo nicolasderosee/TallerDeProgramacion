@@ -1,0 +1,75 @@
+//realizar un programa que lea valores enteros y genere un ABB hasta leer el valor 58
+
+
+program tres;
+type 
+  arbol=^nodo;
+  nodo=record
+    HI:arbol;
+    HD:arbol;
+    dato:integer;
+  end;
+
+
+procedure insertar(var ab:arbol;n:integer);
+begin
+  if(ab=nil)then begin
+    new(ab);
+    ab^.dato:=n;
+    ab^.HI:=nil;
+    ab^.HD:=nil;
+  end
+  else 
+    if(n<ab^.dato)then 
+      insertar(ab^.HI,n)
+    else
+      insertar(ab^.HD,n);
+end;
+
+
+procedure cargarArb(var a:arbol);
+var
+  num:integer;
+begin
+  readln(num);
+  while(num<>0)do begin
+    insertar(a,num);
+    readln(num);
+  end;
+end;
+
+
+
+Procedure imprimir ( a:arbol ); 
+begin
+   if ( a<> nil ) then begin
+    writeln(a^.dato);
+    imprimir (a^.HI);
+    imprimir (a^.HD);
+   end;
+end;
+
+
+//suma todos los elementos del arbol 
+function sumaArbol(A:arbol):integer; //sum debe inicializarse en el programa en 0. 
+begin
+	if(A<>nil)then
+	begin
+		sumaArbol:= A^.dato + sumaArbol(A^.HI)+sumaArbol(A^.HD);
+	end
+	else
+	begin
+		sumaArbol:=0;
+	end;
+end;
+
+var 
+  abb:arbol;
+  sum:integer;
+begin
+  abb:=nil;
+  sum:=0;
+  cargarArb(abb);
+  imprimir(abb);
+  writeln(sumaArbol(abb));
+end.

@@ -1,0 +1,19 @@
+objetos:
+public abstract abstract producto
+private double precio 
+private int codigo
+
+public class ProductoLacteo extends Producto
+private boolean esLibreLactosa
+
+public class ProductoPanificado extends Producto
+private boolean esAptoCeliacos
+private boolean esLibreGluten
+
+las variables instancia que almacena son: esAptoCeliacos, esLibreGluten, precio y codigo 
+
+concurrente:
+
+Si, se produce choque ya que el robot tipo2 libera la esquina antes de moverse, por lo tanto si librera la esquina el robot 1 la puede acceder y entonces ahi se produce un choque.
+
+si, es verdadera. El robot hasta que no reciba el mensaje que otro robot le mandó, no puede seguir con la ejecución del programa. Este tipo de mensaje es sincrónico.

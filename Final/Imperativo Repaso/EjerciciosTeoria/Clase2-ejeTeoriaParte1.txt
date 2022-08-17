@@ -1,0 +1,86 @@
+program TBClase2Parte1a;
+type
+lista=^nodo;
+
+nodo=record
+ dato:integer;
+ sig:lista;
+end;
+ 
+
+{Realice un programa que lea 7 valores enteros. Genere una lista donde 
+ * los elementos se inserten adelante. Al finalizar implemente un módulo
+ *  recursivo que imprima los valores de la lista.}
+ 
+{Agregar adelante en una lista de enteros} 
+procedure agregarAdelante(var l:lista; n:integer);
+var
+	nue:lista;
+begin
+	new(nue);
+	nue^.dato:=n;
+	nue^.sig:=l;
+	l:=nue;
+end;
+
+{Crear una lista de enteros con 7 valores}
+procedure cargarlista(var l:lista);
+var i,n:integer;
+begin 
+    for i:=1 to 7 do begin
+	readln(n);
+	agregarAdelante(l,n);
+     end;
+end;
+
+
+
+{Imprimir la lista en orden}
+procedure imprimir(l:lista);
+begin
+	if(l<>nil)then begin
+		write(l^.dato, ' - ');
+		imprimir(l^.sig);
+	end
+	{else
+	  writeln('caso base');}
+end;
+
+
+
+
+{Imprimir la lista en orden inverso}
+procedure imprimir2(l:lista);
+begin
+	if(l<>nil)then begin
+		imprimir2(l^.sig);
+		write(l^.dato, ' - ');
+	end
+	{else
+	  writeln('caso base');}
+end;
+
+
+
+var 
+	l:lista;
+BEGIN
+	l:=nil;
+	cargarlista(l);	
+    
+    
+    writeln();
+	writeln('-------------------');
+	writeln('Lista en orden');
+	imprimir(l);	
+	writeln();
+	writeln('-------------------');
+	
+	writeln();
+	writeln('-------------------');
+	writeln('Lista invertida');
+	imprimir2(l);	
+	writeln();
+	writeln('-------------------');
+
+END.

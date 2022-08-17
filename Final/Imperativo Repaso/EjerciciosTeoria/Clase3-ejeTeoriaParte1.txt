@@ -1,0 +1,138 @@
+program EjercitacionTeoria3Estantes;
+const 
+	cantE=5;
+	fin='ZZZ';
+type
+	lista =^nodo;
+	nodo = record
+		dato:string;
+		sig:lista;
+	end;
+	vEstantes = array[1..cantE] of lista;
+	
+procedure AgregarAtras(var L,ult:lista;min:string);
+var
+	nuevo:lista;
+begin
+	new(nuevo);
+	nuevo^.dato:=min;
+	nuevo^.sig:=nil;
+	if (L = nil) then
+		L:=nuevo
+	else
+		ult^.sig:=nuevo;
+	ult:=nuevo;
+end;
+
+
+procedure CalcularMinimo(var estantes:vEstantes;var min:string);
+var
+	i,minIndice:integer;
+begin
+	min:=fin;
+	minIndice:=-1;
+	for i:= 1 to cantE do
+	begin
+		if(estantes[i] <> nil) then
+		begin
+			if(estantes[i]^.dato <= min) then
+			begin
+				minIndice:=i;
+				min:=estantes[i]^.dato;
+			end;
+		end;
+	end;
+	if(minIndice <> -1) then
+		estantes[minIndice]:=estantes[minIndice]^.sig;	
+end;
+
+
+procedure MergeEstantes(estantes:vEstantes; var Enuevo,ult:lista);
+var
+	min:string;
+begin
+	Enuevo:=nil;
+	CalcularMinimo(estantes,min);
+	while(min <> fin)do
+	begin
+		AgregarAtras(Enuevo,ult,min);
+		CalcularMinimo(estantes,min);
+	end;
+end;
+Procedure InsertarAscendente(var pri:lista;valor:string);
+//Crea un nuevo nodo y recorre lista para insertarlo de forma que la lista quede ordenada de manera ascendente
+//pri puede ser nil
+//puede modificarse para otros órdenes
+var
+	aux,ant,nue:lista;
+begin
+	new(nue);
+	nue^.dato:=valor;
+	aux:=pri;
+	while ((aux<>nil)and(aux^.dato<valor)) do begin
+		ant:=aux;
+		aux:=aux^.sig;
+	end;
+	nue^.sig:=aux;
+	if(aux=pri)then
+		pri:=nue
+	else
+		ant^.sig:=nue;
+end;
+//
+Procedure GenerarEstantes(var v:vEstantes);
+	var
+		aux:string;
+		i:integer;
+	begin
+		writeln('LECTURA');
+		for i:=1 to cantE do begin
+			v[i]:=nil;
+			writeln('Lista numero ',i,' ---------|');
+			write('Ingrese un libro: ');
+			readln(aux);
+			while(aux<>fin)do begin
+				InsertarAscendente(v[i],aux);
+				write('Ingrese un libro: ');
+				readln(aux);
+			end;
+		end;
+		writeln('-----------------------------------------------------|');
+	end;
+
+Procedure ImprimirLista(l:lista);
+	begin
+		if(l<>nil)then
+			while(l<>nil)do begin
+				writeln(l^.dato);
+				l:=l^.sig;
+			end
+		else
+			writeln('*LISTA VACIA*');
+	end;
+
+//
+Procedure ImprimirVector(v:vEstantes);
+	var
+		i:integer;
+	begin
+		writeln('IMPRESION');
+		for i:=1 to cantE do begin
+			writeln('Lista numero ',i,' ---------|');
+			ImprimirLista(v[i])
+		end;
+		writeln('-----------------------------------------------------|');
+	end;
+//----------------------------------------------------------------------
+
+
+var
+	estantes:vEstantes;
+	Enuevo,ultnuevo:lista;
+begin
+	GenerarEstantes(estantes);
+	ImprimirVector(estantes);	
+	MergeEstantes(estantes,Enuevo,ultnuevo);
+	ImprimirLista(Enuevo);
+end.
+	

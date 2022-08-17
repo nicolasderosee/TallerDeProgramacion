@@ -1,0 +1,111 @@
+programa final 
+
+areas
+  Area1: AreaP(2,2,2,2) 
+  Area2: AreaP(3,3,3,3)
+  Area3: AreaP(4,4,4,4) 
+  Area4: AreaP(5,5,5,5)
+  AreaObjetos: AreaPC(30,30,30,30)
+  AreaFlores: AreaPC(40,40,40,40)
+  AreaCoordinacion: AreaP(1,1,1,1)
+
+robots 
+  robot limpiador
+  variables
+    posAv, posCa, ID: numero  
+    exito: boolean  
+  comenzar
+    RecibirMensaje(ID, robot5)
+    exito:= F
+    posAv:= PosAv
+    posCa:= PosCa
+    mientras (exito = F)
+      BloquearEsquina(30,30)
+      Pos(30,30)
+      si HayFlorEnLaEsquina
+        tomarFlor
+      sino
+        si HayPapelEnLaEsquina 
+          tomarPapel
+        sino 
+          exito:= V
+      Pos(posAv,posCa)
+      LiberarEsquina(30,30)
+    EnviarMensaje(ID, robot5)  
+    RecibirMensaje(exito, robot5)
+    si exito = V
+      Pos(40,40) 
+      mientras HayFlorEnLaBolsa
+        depositarFlor      
+  fin
+
+  robot coordinador
+  variables
+    ID, puesto: numero 
+  comenzar
+    EnviarMensaje(1, robot1)
+    EnviarMensaje(2, robot2)
+    EnviarMensaje(3, robot3)
+    EnviarMensaje(4, robot4)  
+    puesto:= 0
+    repetir 4
+      RecibirMensaje(ID, *)
+      puesto:= puesto + 1
+      si (puesto = 3)
+        si (ID = 1)
+          EnviarMensaje(V, robot1)
+          EnviarMensaje(F, robot2) 
+          EnviarMensaje(F, robot3)
+          EnviarMensaje(F, robot4)
+        sino 
+          si (ID = 2)
+            EnviarMensaje(F, robot1)
+            EnviarMensaje(V, robot2) 
+            EnviarMensaje(F, robot3)
+            EnviarMensaje(F, robot4) 
+          sino 
+            si (ID = 3) 
+              EnviarMensaje(F, robot1)
+              EnviarMensaje(F, robot2) 
+              EnviarMensaje(V, robot3)
+              EnviarMensaje(F, robot4)
+            sino 
+              EnviarMensaje(F, robot1)
+              EnviarMensaje(F, robot2) 
+              EnviarMensaje(F, robot3)
+              EnviarMensaje(V, robot4)
+  fin
+
+variables 
+  robot5: coordinador
+  robot1: limpiador
+  robot2: limpiador
+  robot3: limpiador
+  robot4: limpiador
+
+comenzar
+  AsignarArea(robot5, AreaCoordinacion)
+
+  AsignarArea(robot1, Area1)
+  AsignarArea(robot1, AreaObjetos)
+  AsignarArea(robot1, AreaFlores)
+
+  AsignarArea(robot2, Area2)
+  AsignarArea(robot2, AreaObjetos)
+  AsignarArea(robot2, AreaFlores)
+  
+  AsignarArea(robot3, Area3)
+  AsignarArea(robot3, AreaObjetos)
+  AsignarArea(robot3, AreaFlores)
+
+  AsignarArea(robot4, Area4)
+  AsignarArea(robot4, AreaObjetos)
+  AsignarArea(robot4, AreaFlores)
+
+  Iniciar(robot1, 2,2)
+  Iniciar(robot2, 3,3)
+  Iniciar(robot3, 4,4)
+  Iniciar(robot4, 5,5)
+  Iniciar(robot5, 1,1)
+fin
+

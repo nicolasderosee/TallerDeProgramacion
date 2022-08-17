@@ -1,0 +1,171 @@
+programa EjercicioAdi2
+procesos
+  proceso juntar(ES flor:numero; ES papel:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina) | (HayPapelEnLaEsquina)
+      si (HayFlorEnLaEsquina) 
+        tomarFlor
+        flor:= flor + 1
+      si (HayPapelEnLaEsquina) 
+        tomarPapel
+        papel:= papel + 1
+  fin
+  
+  proceso BloquearE(E av:numero; E ca:numero; ES flor:numero; ES papel:numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    mover
+    juntar(flor,papel)
+    mover
+    LiberarEsquina(av,ca)
+  fin 
+  
+  proceso recorrerA1 (E alto:numero; E ancho:numero; ES flor:numero; ES papel:numero)
+  comenzar
+    repetir alto
+      juntar(flor,papel)
+      mover
+    derecha
+    repetir ancho
+      juntar(flor,papel)
+      BloquearE(PosAv + 1,PosCa,flor,papel)
+  fin
+  
+  proceso recorrerA2 (E alto:numero; E ancho:numero; ES flor:numero; ES papel:numero)
+  comenzar 
+    derecha 
+    repetir alto
+      juntar(flor,papel)
+      mover
+    derecha 
+    repetir ancho
+      juntar(flor,papel)
+      BloquearE(PosAv - 1,PosCa,flor,papel)
+  fin 
+
+  proceso recorrerB1(E alto:numero; E ancho:numero; ES flor:numero; ES papel:numero)
+  comenzar
+    repetir alto 
+      juntar(flor,papel)
+      BloquearE(PosAv,PosCa + 1,flor,papel)
+    derecha
+    repetir ancho
+      juntar(flor,papel)
+      mover
+  fin 
+  
+  proceso recorrerB2(E alto:numero; E ancho:numero; ES flor:numero; ES papel:numero)
+  comenzar 
+    derecha 
+    repetir alto 
+      juntar(flor,papel)
+      BloquearE(PosAv,PosCa - 1,flor,papel)
+    derecha 
+    repetir ancho 
+      juntar(flor,papel)
+      mover
+  fin 
+ 
+areas
+  ciudad: AreaPC(1,1,20,15)
+
+robots
+  robot tipo1
+  variables
+    ancho:numero
+    alto:numero
+    f:numero
+    p:numero
+    av:numero
+    ca:numero
+  comenzar 
+    f:= 0
+    p:= 0
+    ancho:= 4
+    alto:= 2
+    RecibirMensaje(av,jefe)
+    RecibirMensaje(ca,jefe)
+    Pos(av,ca)
+    recorrerA1(alto,ancho,f,p) 
+    recorrerA2(alto,ancho,f,p)
+    EnviarMensaje(f,jefe)
+    EnviarMensaje(p,jefe) 
+  fin
+  
+  robot tipo2
+  variables 
+    ancho:numero
+    alto:numero 
+    f:numero
+    p:numero
+    av:numero
+    ca:numero 
+  comenzar
+    f:= 0
+    p:= 0
+    ancho:= 2
+    alto:= 4
+    RecibirMensaje(av,jefe)
+    RecibirMensaje(ca,jefe)
+    Pos(av,ca)
+    recorrerB1(alto,ancho,f,p) 
+    recorrerB2(alto,ancho,f,p)
+    EnviarMensaje(f,jefe)
+    EnviarMensaje(p,jefe) 
+  fin 
+  
+  robot tipo3
+  variables
+    totalf:numero
+    totalp:numero 
+    f:numero
+    p:numero
+  comenzar
+    f:=0
+    p:=0
+    totalf:=0
+    totalp:=0
+    EnviarMensaje(1,juntador1)
+    EnviarMensaje(2,juntador1)
+    EnviarMensaje(1,juntador2)
+    EnviarMensaje(6,juntador2)
+    EnviarMensaje(2,juntador3)
+    EnviarMensaje(1,juntador3)
+    EnviarMensaje(6,juntador4)
+    EnviarMensaje(1,juntador4)
+    repetir 4
+      RecibirMensaje(f,*)
+      RecibirMensaje(p,*)
+      totalf:= totalf + f
+      totalp:= totalp + p
+    Informar('TotalDeFloresJuntadasPorLos4Robots',totalf)
+    Informar('TotalDePapelesJuntadosPorLos4Robots',totalp) 
+  fin 
+  
+variables
+  juntador1:tipo1
+  juntador2:tipo1
+  juntador3:tipo2
+  juntador4:tipo2
+  jefe:tipo3
+
+comenzar
+  AsignarArea(juntador1,ciudad)
+  AsignarArea(juntador2,ciudad)
+  AsignarArea(juntador3,ciudad)
+  AsignarArea(juntador4,ciudad)
+  AsignarArea(jefe,ciudad)
+  Iniciar(juntador1, 20, 1)
+  Iniciar(juntador2, 20, 2) 
+  Iniciar(juntador3, 20, 4)
+  Iniciar(juntador4, 20, 5)
+  Iniciar(jefe, 20, 15)
+fin
+
+
+
+
+
+
+
+

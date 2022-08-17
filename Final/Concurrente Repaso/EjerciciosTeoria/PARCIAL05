@@ -1,0 +1,104 @@
+programa PARCIAL05
+procesos 
+  proceso DespositarF (ES flor:numero; ES esquinasvacias:numero)
+  comenzar
+    si ~HayFlorEnLaEsquina 
+      depositarFlor
+      flor:= flor+1
+      esquinasvacias:= esquinasvacias+1
+    sino
+      depositarFlor
+      flor:= flor+1     
+  fin
+  proceso Bloquear (ES flor:numero; ES esquinasvacias:numero; E av:numero; E ca:numero)
+  variables 
+    avR,caR:numero
+  comenzar
+    Random(avR,5,20)
+    Random(caR,5,20)
+    BloquearEsquina(avR,caR)
+    Pos(avR,caR)
+    DespositarF(flor,esquinasvacias)
+    Pos(av,ca)
+    LiberarEsquina(avR,caR)
+  fin
+areas
+  AreaCom: AreaC(5, 5, 20, 20)
+  Area1: AreaP(10,1,10,1)
+  Area2: AreaP(12,1,12,1)
+  Area3: AreaP(14,1,14,1)
+  AreaJ: AreaP(21, 21, 21, 21)
+robots
+  robot tipo1
+  variables 
+    esquinasvacias,flor,av,ca,quienSoy:numero
+  comenzar
+    flor:=0
+    esquinasvacias:=0
+    av:=PosAv
+    ca:=PosCa
+    RecibirMensaje(quienSoy, rJ)
+    repetir 4
+      Bloquear(flor,esquinasvacias,av,ca)
+    EnviarMensaje(quienSoy, rJ)
+    EnviarMensaje(esquinasvacias, rJ)
+    EnviarMensaje(flor, rJ)
+  fin
+  robot robotJefe
+  variables 
+    quienSos,esquinasvacias,min,minF,flor,total:numero
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    min:=999
+    minF:=0
+    repetir 3
+      RecibirMensaje(quienSos, *)
+      si (quienSos=1)
+        RecibirMensaje(esquinasvacias, r1)
+        RecibirMensaje(flor, r1)
+        total:=total+flor
+      sino
+        si (quienSos=2)
+          RecibirMensaje(esquinasvacias, r2)
+          RecibirMensaje(flor, r2)
+          total:=total+flor
+        sino
+          RecibirMensaje(esquinasvacias, r3)
+          RecibirMensaje(flor, r3)
+          total:=total+flor
+      si (esquinasvacias<min)
+        min:=esquinasvacias
+        minF:=quienSos
+    Informar('menor', minF)
+    Informar('flores', total)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  rJ: robotJefe
+comenzar
+  AsignarArea(r1, Area1)
+  AsignarArea(r2, Area2)
+  AsignarArea(r3, Area3)
+  AsignarArea(r1, AreaCom)
+  AsignarArea(r2,  AreaCom)
+  AsignarArea(r3,  AreaCom)
+  AsignarArea(rJ, AreaJ)
+  
+  Iniciar(r1, 10,1)
+  Iniciar(r2, 12,1)
+  Iniciar(r3, 14, 1)
+  Iniciar(rJ,21,21)
+fin 
+
+     
+      
+      
+      
+    
+  
+  
+  

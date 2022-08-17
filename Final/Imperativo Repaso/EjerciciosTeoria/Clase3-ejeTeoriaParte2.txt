@@ -1,0 +1,232 @@
+Suponiendo que 4 integrantes de una familia, llevan sus gastos de manera similar a Juan y Paula. Se pide:​
+
+a)Generar la estructura para almacenar los gastos de cada uno de los integrantes. Cada estructura debe generarse de manera ordenada por nombre de gasto. 
+Cada estructura se carga hasta leer el nombre ‘ZZ’.​
+
+​b)Imprimir las estructuras generadas en a.​
+
+​c)Realizar el merge de manera de generar una única estructura que contenga los montos totales por impuesto con la estructura generada en a.​
+
+​d)A partir de la estructura generada en c. arme un ABB ordenado por monto total y luego imprima el nombre del gasto que menos costo.​
+
+program dos;
+const
+  dimF=4; // 1 lista por integrante
+type
+  subR=1..dimF;
+  
+  gasto=record
+    nombre:string;
+    costo:real;
+    integrante:subR;
+  end;
+  
+  subGasto=record
+    nombre:string;
+    costo:real;
+  end;
+  
+  lista=^nodo;
+  nodo=record
+    dato:subGasto;
+    sig:lista;
+  end;
+  
+  vecL = array[subR] of lista;
+
+  arbol=^nodo2;
+  nodo2=record
+    dato:subGasto;
+    HI:arbol;
+    HD:arbol;
+  end;
+
+
+procedure inicializarVec(var v:vecL);
+var i:subR;
+begin
+  for i:= 1 to dimF do 
+    v[i]:=nil;
+end;
+  
+
+procedure leerGasto(var g:gasto);
+begin
+  writeln('ingrese en que gasto: ');
+  readln(g.nombre);
+  if(g.nombre<>'ZZ')then begin
+    writeln('cuanto gasto: ');
+    readln(g.costo);
+    writeln('numero de integrante');
+    readln(g.integrante);
+  end;
+end;
+
+
+procedure agregarOrdenado(var L:lista; g:gasto); //insertarOrdenado
+var nuevo,anterior,actual:lista;
+begin
+  actual:=L;
+  new(nuevo);
+  nuevo^.dato.nombre:=g.nombre;
+  nuevo^.dato.costo:=g.costo;
+  nuevo^.sig:=nil;
+  while((actual<>nil) and (actual^.dato.nombre < g.nombre)) do begin
+    anterior:=actual;
+    actual:=actual^.sig;
+  end;
+  if(actual=L)then
+    L:=nuevo
+  else
+    anterior^.sig:=nuevo;
+  nuevo^.sig:=actual;
+end;
+
+
+
+procedure cargarVec(var v:vecL);
+var
+  g:gasto;
+begin
+  leerGasto(g);
+  while(g.nombre<>'ZZ')do begin
+    agregarOrdenado(v[g.integrante],g);
+    leerGasto(g);
+  end;
+end;
+
+
+procedure imprimirVec(v:vecL);
+var
+  i:subR;
+begin
+  for i:=1 to dimF do begin
+    writeln('Gastos del integrante',i,':');
+    while(v[i]<>nil)do begin
+       writeln (v[i]^.dato.nombre);
+       writeln(v[i]^.dato.costo:0:2);
+       v[i]:=v[i]^.sig
+    end;
+  end;
+end;
+
+
+{empiezan procedmientos para el merge}
+
+
+procedure agregarAtras(var l:lista; var ult:lista; nom:string; cost:real);
+var nuevo:lista;
+begin
+  new(nuevo);
+  nuevo^.dato.nombre:=nom;
+  nuevo^.dato.costo:=cost;
+  nuevo^.sig:=nil;
+  if (l = nil) then
+     l:=nuevo
+  else
+     ult^.sig:=nuevo;
+  ult:=nuevo;
+end;
+ 
+
+
+procedure minimo(var v:vecL; var nomMin:string; var costo:real);
+var
+  indiceMin,i:integer;
+begin
+  nomMin:='ZZZ'; indiceMin:=-1;
+  for i:= 1 to dimF do 
+    if(v[i] <> nil)then 
+      if(v[i]^.dato.nombre < nomMin) then begin
+        indiceMin:=i;
+        nomMin:=v[i]^.dato.nombre;
+      end;
+  if(indiceMin <> -1) then begin
+    //nomMin:=v[indiceMin]^.dato.nombre;
+    costo:=v[indiceMin]^.dato.costo;
+    v[indiceMin]:= v[indiceMin]^.sig;
+  end;
+end;
+
+
+procedure merge(v:vecL; var nuevaL:lista);
+var 
+  nomMin, actual:string; monto,montoTot:real; ult: lista;
+begin
+  nuevaL:=nil;
+  minimo(v,nomMin,monto);
+  while(nomMin<>'ZZZ')do begin
+    actual:=nomMin; montoTot:=0;
+    while((nomMin<>'ZZZ') and (actual=nomMin)) do begin
+      montoTot:= montoTot + monto;
+      minimo(v,nomMin,monto);
+    end;
+    agregarAtras(nuevaL,ult,actual,montoTot);
+  end;
+end;
+
+
+procedure imprimirL(L:lista);
+begin
+  writeln('gastos unificados:  ');
+  while(L<>nil) do begin
+    writeln(L^.dato.nombre);
+    writeln(L^.dato.costo:0:2);
+    L:=L^.sig;
+  end;
+end;
+
+
+{armo el arbol}
+
+
+
+procedure agregar(var a:arbol; g:subGasto);
+begin
+  if(a=nil)then begin
+    new(a);
+    a^.dato:=g; a^.HI:=nil; a^.HD:=nil;
+  end
+  else 
+    if(g.costo < a^.dato.costo) then agregar(a^.HI,g)
+    else agregar(a^.HD,g);
+end;
+
+
+procedure cargarArb(var a:arbol; l:lista);
+begin
+  a:=nil;
+  while(l<>nil)do begin
+    agregar(a,l^.dato);
+    l:=l^.sig;
+  end;
+end;
+
+
+procedure minimo(a:arbol;var nomMin:string);
+begin
+  if(a<>nil)then
+    if(a^.HI = nil) then 
+      nomMin:= a^.dato.nombre
+    else
+      minimo(a^.HI, nomMin); 
+end;
+
+{programa ppal}
+
+
+var
+  vec:vecL;
+  listaN:lista;
+  arb:arbol;
+  min:string;
+begin
+  inicializarVec(vec);
+  cargarVec(vec);
+  imprimirVec(vec);
+  merge(vec,listaN);
+  imprimirL(listaN);
+  cargarArb(arb,listaN);
+  minimo(arb,min);
+  writeln('el nombre del gasto que menos costo es: ',min);
+end.

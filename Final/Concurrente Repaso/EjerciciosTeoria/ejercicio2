@@ -1,0 +1,52 @@
+programa ejercicio2
+procesos
+  proceso dejarFlores(E flores: numero)
+  comenzar
+    repetir flores
+      depositarFlor
+  fin
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso rectangulo(E alto:numero; E ancho:numero; ES flores: numero)
+  comenzar
+    repetir 2
+      repetir alto
+        juntarFlores(flores)
+        mover
+      derecha
+      repetir ancho
+        juntarFlores(flores)
+        mover
+      derecha
+  fin
+areas
+  area1: AreaPC(1,1,100,100)
+robots
+  robot recorredor
+  variables
+    av, ca, flores:numero
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    flores:= 0
+    rectangulo(15, 20, flores)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    dejarFlores(flores)
+    Pos(av,ca)
+    LiberarEsquina(10,10)
+  fin
+variables
+  robot1: recorredor
+  robot2: recorredor 
+comenzar 
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  Iniciar(robot1, 15, 15)
+  Iniciar(robot2, 40, 40)
+fin
+

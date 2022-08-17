@@ -1,0 +1,110 @@
+programa repaso4 
+procesos 
+  proceso juntarFlor(ES f:numero) 
+  comenzar 
+    mientras (HayFlorEnLaEsquina) 
+      tomarFlor 
+      f:= f + 1 
+  fin  
+   
+  proceso juntarPapel(ES p:numero) 
+  comenzar 
+    mientras (HayPapelEnLaEsquina) 
+      tomarPapel
+      p:= p + 1
+  fin  
+  
+  proceso recorrerR1 (ES f:numero)
+  comenzar
+    derecha
+    repetir 4
+      repetir 10
+        juntarFlor(f)
+        mover
+      derecha
+  fin
+  
+  proceso recorrerR2(E p:numero)
+  comenzar
+    repetir 3
+      derecha
+    repetir 4
+      repetir 10
+        juntarPapel(p)
+        mover
+      derecha
+  fin
+  
+areas 
+  areaR1: AreaP(2,2,2,2)
+  areaR2: AreaP(3,3,3,3)
+  areaR3: AreaP(1,1,1,1)
+  areaR1yR2: AreaPC(15,15,25,25)
+
+robots 
+  robot tipo1  
+  variables 
+    f,p,id,miAv,miCa,av,ca:numero
+  comenzar 
+    f:=0
+    RecibirMensaje(id,robot3)
+    miAv:= PosAv
+    miCa:= PosCa
+    RecibirMensaje(av,robot3)
+    RecibirMensaje(ca,robot3)
+    Pos(av,ca)
+    si(id=1)
+      recorrerR1(f)
+    sino
+      recorrerR2(p)
+    Pos(miAv,miCa)
+    EnviarMensaje(id,robot3)
+    si(id=1)
+      EnviarMensaje(f,robot3)
+    sino
+      EnviarMensaje(p,robot3)
+  fin  
+  
+  
+  robot tipo2
+  variables 
+    nroRobot,f,p,fTotal,pTotal,rMax:numero 
+  comenzar 
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(15,robot1)
+    EnviarMensaje(25,robot1)
+    EnviarMensaje(25,robot2)
+    EnviarMensaje(15,robot2)
+    fTotal:=0
+    pTotal:=0
+    repetir 2
+      RecibirMensaje(nroRobot,*)
+      si (nroRobot = 1)
+        RecibirMensaje(f,robot1)
+        fTotal:= fTotal + f
+      sino
+        RecibirMensaje(p,robot2)
+        pTotal:= pTotal + p
+      si(fTotal > pTotal)
+        rMax:= 1
+      sino 
+        rMax:= 2
+    Informar(rMax)
+  fin 
+  
+variables
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo2
+
+comenzar 
+  AsignarArea(robot1,areaR1)
+  AsignarArea(robot2,areaR2)
+  AsignarArea(robot3,areaR3)
+  AsignarArea(robot1,areaR1yR2)
+  AsignarArea(robot2,areaR1yR2)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,3,3)
+  Iniciar(robot3,1,1)
+fin 

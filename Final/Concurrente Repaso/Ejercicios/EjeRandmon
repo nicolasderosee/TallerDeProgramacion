@@ -1,0 +1,141 @@
+programa ejercicio
+procesos
+  proceso depositarFlores
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso depositarPapeles
+  comenzar
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso juntarFlores(E id:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      EnviarMensaje(id,robotJefe)
+  fin
+  proceso juntarPapeles(E id:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      EnviarMensaje(id,robotJefe)
+  fin
+  proceso juntoMas(ES idMax:numero; ES objMax:numero; E id:numero; E obj:numero)
+  comenzar
+    si(obj > objMax)
+      objMax:= obj
+      idMax:= id
+  fin
+areas
+  areaComun: AreaPC(45,48,62,69)
+  areaRecolector1: AreaP(10,10,10,10)
+  areaRecolector2: AreaP(11,10,11,10)
+  areaRecolector3: AreaP(12,10,12,10)
+  areaRecolector4: AreaP(13,10,13,10)
+  areaJefe: AreaP(1,1,1,1)
+robots
+  robot recolector
+  variables
+    av,ca,unaAv,unaCa,id:numero
+    junteMas:boolean
+  comenzar
+    RecibirMensaje(id,robotJefe)
+    av:= PosAv
+    ca:= PosCa
+    repetir 5
+      Random(unaAv,45,62)
+      Random(unaCa,48,69)
+      BloquearEsquina(unaAv,unaCa)
+      Pos(unaAv,unaCa)
+      juntarPapeles(id)
+      juntarFlores(id)
+      EnviarMensaje(-1,robotJefe)
+      Pos(av,ca)
+      LiberarEsquina(unaAv,unaCa)
+    RecibirMensaje(junteMas,robotJefe)
+    si(junteMas)
+      depositarFlores
+      depositarPapeles
+  fin
+  robot jefe
+  variables
+    id,objRobot1,objRobot2,objRobot3,objRobot4,idMax,objMax:numero
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    objRobot1:= 0
+    objRobot2:= 0
+    objRobot3:= 0
+    objRobot4:= 0
+    repetir 4
+      repetir 5
+        id:= 0
+        mientras(id <> -1)
+          RecibirMensaje(id,*)
+          si(id = 1)
+            objRobot1:= objRobot1 + 1
+          sino
+            si(id = 2)
+              objRobot2:= objRobot2 + 1
+            sino
+              si(id = 3)
+                objRobot3:= objRobot3 + 1
+              sino
+                si(id = 4)
+                  objRobot4:= objRobot4 + 1
+    objMax:= -1
+    juntoMas(idMax,objMax,1,objRobot1)
+    juntoMas(idMax,objMax,2,objRobot2)
+    juntoMas(idMax,objMax,3,objRobot3)
+    juntoMas(idMax,objMax,4,objRobot4)
+    
+    si(idMax = 1)
+      EnviarMensaje(V,robot1)
+      EnviarMensaje(F,robot2)
+      EnviarMensaje(F,robot3)
+      EnviarMensaje(F,robot4)
+    sino
+      si(idMax = 2)
+        EnviarMensaje(F,robot1)
+        EnviarMensaje(V,robot2)
+        EnviarMensaje(F,robot3)
+        EnviarMensaje(F,robot4)
+      sino  
+        si(idMax = 3)
+          EnviarMensaje(F,robot1)
+          EnviarMensaje(F,robot2)
+          EnviarMensaje(V,robot3)
+          EnviarMensaje(F,robot4)
+        sino
+          si(idMax = 4)
+            EnviarMensaje(F,robot1)
+            EnviarMensaje(F,robot2)
+            EnviarMensaje(F,robot3)
+            EnviarMensaje(V,robot4)
+  fin
+variables
+  robot1:recolector
+  robot2:recolector
+  robot3:recolector
+  robot4:recolector
+  robotJefe:jefe
+comenzar
+  AsignarArea(robot1,areaComun)
+  AsignarArea(robot1,areaRecolector1)
+  AsignarArea(robot2,areaComun)
+  AsignarArea(robot2,areaRecolector2)
+  AsignarArea(robot3,areaComun)
+  AsignarArea(robot3,areaRecolector3)
+  AsignarArea(robot4,areaComun)
+  AsignarArea(robot4,areaRecolector4)
+  AsignarArea(robotJefe,areaJefe)
+  Iniciar(robot1,10,10)
+  Iniciar(robot2,11,10)
+  Iniciar(robot3,12,10)
+  Iniciar(robot4,13,10)
+  Iniciar(robotJefe,1,1)
+fin

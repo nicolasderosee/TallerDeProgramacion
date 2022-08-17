@@ -1,0 +1,59 @@
+programa x
+procesos
+  proceso juntarPapel(ES p:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p + 1
+  fin 
+areas
+  areaR1: AreaP(2,1,2,100)
+  areaR2: AreaP(3,1,3,100)
+  areaR3: AreaP(4,1,4,100)
+  areaR4: AreaP(5,1,5,100)
+  areaR5: AreaP(1,1,1,1)
+robots 
+  robot tipo1
+  variables
+    p,pasos,soy:numero
+  comenzar
+    p:= 0
+    RecibirMensaje(soy,r5)
+    mientras(PosCa<100)
+      Random(pasos,1,7)
+      si(PosCa + pasos > 100)
+        pasos:= pasos - ((PosCa+pasos)-100)
+      repetir pasos
+        juntarPapel(p) 
+        mover
+    EnviarMensaje(soy,r5)
+  fin
+  robot tipo2
+  variables
+    id:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 2
+      RecibirMensaje(id,*)
+      Informar(id)
+    repetir 2
+      RecibirMensaje(id,*)
+  fin
+variables
+  r1,r2,r3,r4:tipo1
+  r5:tipo2
+comenzar 
+  AsignarArea(r1, areaR1)
+  AsignarArea(r2, areaR2)
+  AsignarArea(r3, areaR3)
+  AsignarArea(r4, areaR4)
+  AsignarArea(r5, areaR5)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(r3,4,1)
+  Iniciar(r4,5,1)
+  Iniciar(r5,1,1)
+fin

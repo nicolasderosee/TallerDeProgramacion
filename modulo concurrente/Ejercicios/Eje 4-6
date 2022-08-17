@@ -1,0 +1,79 @@
+programa Ejercicio4-6
+
+procesos 
+  proceso juntar (ES flor:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor:= flor + 1
+  fin
+
+  proceso rectangulo(E alto:numero; E ancho:numero; ES flor:numero)
+  comenzar 
+    repetir 2
+      repetir alto
+        juntar(flor)
+        mover
+      derecha
+      repetir ancho 
+        juntar(flor)
+        mover
+      derecha
+  fin
+  
+  proceso depositar(E flor:numero; E av:numero; E ca:numero)
+  comenzar
+    repetir flor 
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+    
+areas
+  ciudad: AreaC(1,1,100,100)
+
+robots 
+  robot tipo1
+  variables 
+    f:numero
+    alto:numero
+    ancho:numero
+    av:numero
+    ca:numero
+  comenzar
+    f:= 0
+    ancho:=15
+    RecibirMensaje(alto,robot3)
+    RecibirMensaje(av,robot3)
+    RecibirMensaje(ca,robot3)
+    Pos(av,ca)
+    rectangulo(alto,ancho,f)
+    depositar(f,av,ca)  
+  fin
+  
+  robot tipo2
+  comenzar 
+    EnviarMensaje(10,robot1)
+    EnviarMensaje(12,robot1)
+    EnviarMensaje(13,robot1)
+    EnviarMensaje(10,robot2)
+    EnviarMensaje(38,robot2)
+    EnviarMensaje(7,robot2)
+  fin 
+  
+
+variables
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo2
+comenzar 
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1, 15, 15)
+  Iniciar(robot2, 40, 40) 
+  Iniciar(robot3, 1, 1)
+fin
+

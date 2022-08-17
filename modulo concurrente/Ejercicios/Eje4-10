@@ -1,0 +1,110 @@
+programa Ejercicio4-10
+
+procesos 
+  proceso juntar (ES flor:numero; ES papel:numero; ES ok:boolean)
+  comenzar
+    si(HayFlorEnLaEsquina) | (HayPapelEnLaEsquina) 
+      si (HayFlorEnLaEsquina) 
+        tomarFlor 
+        flor:= flor + 1
+      si (HayPapelEnLaEsquina) 
+        tomarPapel 
+        papel:= papel + 1
+    sino
+      ok:=F
+  fin
+
+  proceso tomar(ES flor:numero; ES papel:numero; E av:numero; E ca:numero; ES ok:boolean)
+  comenzar
+    BloquearEsquina(15,23)
+    Pos(15,23)
+    juntar(flor,papel,ok)
+    Pos(av,ca)
+    LiberarEsquina(15,23)
+  fin
+     
+areas
+  ciudad1: AreaP(9,9,9,9)
+  ciudad2: AreaP(11,9,11,9)
+  ciudad3: AreaP(13,9,13,9)
+  ciudad4: AreaPC(15,23,15,23)
+  ciudad5: AreaP(1,1,1,1)
+
+robots 
+  robot tipo1
+  variables 
+    f:numero
+    p:numero
+    av:numero
+    ca:numero
+    ok:boolean
+    total:numero
+    id:numero
+  comenzar
+    total:=0
+    f:= 0
+    p:=0
+    ok:=V
+    av:= PosAv
+    ca:= PosCa
+    RecibirMensaje(id,jefe) 
+    mientras(ok=V)
+      tomar(f,p,av,ca,ok)  
+    Informar('cantidadDeFlores',f)
+    Informar('cantidadDePapeles',p)
+    total:= f + p
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(total,jefe)
+  fin
+  
+  robot tipo2
+  variables 
+    max:numero
+    CantElem:numero
+    id:numero
+    idmax:numero
+  comenzar
+    max:=-1
+    EnviarMensaje(1,recolector1)
+    EnviarMensaje(2,recolector2)
+    EnviarMensaje(3,recolector3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si(id = 1) 
+        RecibirMensaje(CantElem,recolector1)
+      sino 
+        si(id = 2)
+          RecibirMensaje(CantElem,recolector2)
+        sino 
+          si(id = 3)
+            RecibirMensaje(CantElem,recolector3)      
+      si(CantElem>=max)
+        max:=CantElem
+        idmax:=id
+    Informar('ElRobotQueMasElemJuntoFueEl', idmax) 
+  fin 
+      
+  
+variables
+  recolector1: tipo1
+  recolector2: tipo1
+  recolector3: tipo1
+  jefe:tipo2
+comenzar 
+  AsignarArea(recolector1,ciudad1)
+  AsignarArea(recolector1,ciudad4)
+  AsignarArea(recolector2,ciudad2)
+  AsignarArea(recolector2,ciudad4)
+  AsignarArea(recolector3,ciudad3)
+  AsignarArea(recolector3,ciudad4)
+  AsignarArea(jefe,ciudad5)
+  AsignarArea(jefe,ciudad4)
+  Iniciar(recolector1, 9, 9)
+  Iniciar(recolector2, 11, 9) 
+  Iniciar(recolector3, 13, 9)
+  Iniciar(jefe, 1, 1) 
+fin
+
+
+
+

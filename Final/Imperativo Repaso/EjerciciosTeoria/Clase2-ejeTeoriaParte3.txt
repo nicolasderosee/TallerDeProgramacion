@@ -1,0 +1,122 @@
+Program arboles;
+
+Type
+  arbol = ^nodo;
+
+  nodo = record
+   dato: integer;
+   HI: arbol;
+   HD: arbol;
+  end;
+
+// crea nodos poniendo los valores menores a la iz y mayores a la der
+Procedure crear (var A:arbol; num:integer);
+Begin
+  if (A = nil) then
+   begin
+      new(A);
+      A^.dato:= num; A^.HI:= nil; A^.HD:= nil;
+   end
+   else
+    if (num < A^.dato) then crear(A^.HI,num)
+    else crear(A^.HD,num)   
+End;
+
+// imprime los valores de los nodos de izq a derecha (menores a mayores)
+Procedure enOrden ( a : arbol ); 
+begin
+   if ( a<> nil ) then begin
+    enOrden (a^.HI);
+    writeln ('---',a^.dato,'---');
+    enOrden (a^.HD);
+   end;
+end;
+
+//-- multiplica por dos el valor del elemento de cada nodo
+Procedure por2 ( a : arbol ); 
+begin
+   if ( a<> nil ) then begin
+    por2 (a^.HI);
+    por2 (a^.HD);
+    a^.dato:= a^.dato*2;
+   end;
+end;
+
+
+//------------busca max, devuelve valor y puntero al nodo del max
+
+//el nodo max nunca va a estar a la izquierda del arbol 
+
+procedure maximo (a:arbol;var max:integer; var m:arbol); //max inicializada en -9999 en prog y m:=nil
+begin
+	 if (a<>nil) then
+	 begin
+		max:=a^.dato;
+		m:=a;
+		maximo (a^.HD,max,m);	
+	end;
+end;
+
+
+function vermax(a:arbol):integer; //devuelve el valor maximo del arbol 
+begin  
+	if(a=nil)then
+		vermax:=-1     
+	else begin       
+		vermax:=a^.dato;       
+		if(a^.HD<>nil)then         
+			vermax:=vermax(a^.HD);  
+	end;
+end;
+
+function elemMaxF(a:arbol):integer;     
+begin        
+	if a<>nil then            
+		if (a^.HD=nil) then 
+			elemMaxF:=a^.dato            
+		else elemMaxF:=elemMaxF(a^.HD)        
+	else elemMaxF := -1;    
+end;
+
+
+function maximo2 (a : arbol):arbol; //devuelve el nodo donde esta el mayor valor del arbol 
+begin    
+	if (a=nil) then        
+		maximo2:= nil    
+	else      
+		if (a^.hd = nil) then        
+			maximo2 := a    
+		else        
+			maximo2 := maximo2(a^.hd);
+end;
+
+
+
+//-------------programa-------------------
+Var
+	m,abb:arbol; max,x:integer;
+Begin
+	m:=nil; abb:=nil;max:=-9999;
+	// se cargan nodos hasta q se ingresa el 58
+	// randomize;
+	// x:=random (20);
+	writeln ('escriba un numero');
+	read (x);
+	while (x<>58)do
+	begin
+		crear(abb,x);
+      //x:=random(58);
+		writeln ('escriba un numero');
+		read(x);
+	end;
+
+	enOrden (abb);
+	writeln ('----------------');
+	por2 (abb);
+	enOrden (abb);
+	maximo (abb,max, m);
+	if (m<>nil) then
+		writeln (max,'---',m^.dato)
+	else
+		writeln ('arbol vacio');
+End.
